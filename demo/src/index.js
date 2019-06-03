@@ -4,9 +4,6 @@ import {Launcher} from '../../src'
 import messageHistory from './messageHistory';
 import TestArea from './TestArea';
 import Header from './Header';
-import Footer from './Footer';
-import monsterImgUrl from "./../assets/monster.png";
-import Highlight from "react-highlight.js";
 import './../assets/styles'
 
 
@@ -70,7 +67,7 @@ class Demo extends Component {
       />
       <Launcher
         agentProfile={{
-          teamName: 'react-chat-window',
+          teamName: 'FWD Chat',
           imageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png'
         }}
         onMessageWasSent={this._onMessageWasSent.bind(this)}
@@ -81,8 +78,6 @@ class Demo extends Component {
         isOpen={this.state.isOpen}
         showEmoji
       />
-      <img className="demo-monster-img" src={monsterImgUrl} />
-      <Footer />
     </div>
   }
 }

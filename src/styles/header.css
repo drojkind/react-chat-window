@@ -1,5 +1,5 @@
 .sc-header {
-  background: #4e8cff;
+  background: #453f57;
   min-height: 75px;
   border-top-left-radius: 9px;
   border-top-right-radius: 9px;
@@ -36,7 +36,7 @@
 }
 
 .sc-header--close-button:hover {
-  background: #4882ed;
+  background: #453f52;
 }
 
 .sc-header--close-button img {

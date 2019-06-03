@@ -143,7 +143,7 @@ class UserInput extends Component {
           className="sc-user-input--text"
         >
         </div>
-        <div className="sc-user-input--buttons">
+        {/* <div className="sc-user-input--buttons">
           <div className="sc-user-input--button"></div>
           <div className="sc-user-input--button">
             {this.props.showEmoji && <EmojiIcon
@@ -153,7 +153,7 @@ class UserInput extends Component {
             />}
           </div>
           {this._renderSendOrFileIcon()}
-        </div>
+            </div> */}
       </form>
     );
   }
