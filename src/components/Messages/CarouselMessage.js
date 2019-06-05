@@ -30,9 +30,8 @@ class CarouselMessage extends React.Component {
     const handleOnDragStart = e => e.preventDefault();
     const { currentIndex } = this.state;
     const {wine} = this.props.data;
-    console.log(this.props)
     return (
-      <div style={{ width: 300, margin: "20px 0" }}>
+      <div style={{ width: 300, margin: "20px 0", height: 200 }}>
         <AliceCarousel
           mouseDragEnabled
           dotsDisabled

@@ -2,10 +2,9 @@ import React from "react";
 import Linkify from "react-linkify";
 
 const ButtonMessage = props => {
-    console.log(props)
   return (
     <div>
-      <div className="sc-message--text" style={{ marginBottom: 20 }}>
+      <div className="sc-message--text" style={{ marginBottom: 20, marginTop: 10 }}>
         {
           <Linkify properties={{ target: "_blank" }}>
             {props.data.text}
@@ -13,7 +12,7 @@ const ButtonMessage = props => {
         }
       </div>
       {props.data.button.map(data => 
-        <button className="sc-message--button">{data.text}</button>
+        <button className="sc-message--button" onClick={() => console.log(data.text)}>{data.text}</button>
       )}
     </div>
   );
