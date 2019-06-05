@@ -2,11 +2,19 @@ import React from "react";
 import Linkify from "react-linkify";
 
 const ButtonMessage = props => {
+    console.log(props)
   return (
     <div>
-      <button className="sc-message--button">Yes</button>
-      <button className="sc-message--button">No</button>
-      <button className="sc-message--button">Goodbye</button>
+      <div className="sc-message--text" style={{ marginBottom: 20 }}>
+        {
+          <Linkify properties={{ target: "_blank" }}>
+            {props.data.text}
+          </Linkify>
+        }
+      </div>
+      {props.data.button.map(data => 
+        <button className="sc-message--button">{data.text}</button>
+      )}
     </div>
   );
 };

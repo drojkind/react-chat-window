@@ -47,10 +47,10 @@
   font-weight: 300;
   font-size: 14px;
   line-height: 1.4;
-  margin-right: 2px;
+  margin: 5px 5px 0 0;
   white-space: pre-wrap;
   -webkit-font-smoothing: subpixel-antialiased;
-  width: 80px;
+  min-width: 80px;
   height: 25px;
   background-color:#453f57;
   color: white;
@@ -61,6 +61,7 @@
   padding: 0;
   border: none;
   outline: none;
+  padding: 0 10px 0 10px;
 }
 
 .sc-message--button:hover {
@@ -114,4 +115,13 @@
   .sc-message {
     width: 80%;
   }
+}
+
+.roundButton {
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color:#453f57;
+  outline: none;
 }
