@@ -125,3 +125,9 @@
   background-color:#453f57;
   outline: none;
 }
+
+.roundButton:hover {
+  background-color: #888494;
+  cursor: pointer;
+  cursor: hand;
+}

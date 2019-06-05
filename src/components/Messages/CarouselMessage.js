@@ -1,7 +1,6 @@
 import React from "react";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
-import Linkify from "react-linkify";
 
 import LeftArrow from '../../assets/arrow-left.svg';
 import RightArrow from "../../assets/arrow-right.svg";
@@ -30,56 +29,69 @@ class CarouselMessage extends React.Component {
   render() {
     const handleOnDragStart = e => e.preventDefault();
     const { currentIndex } = this.state;
-    const {data} = this.props;
+    const {wine} = this.props.data;
+    console.log(this.props)
     return (
-      <div style={{ width: 220 }}>
+      <div style={{ width: 300, margin: "20px 0" }}>
         <AliceCarousel
           mouseDragEnabled
           dotsDisabled
           buttonsDisabled
           slideToIndex={currentIndex}
         >
-          <div style={{ textAlign: "center", textDecoration: "none" }}>
-            <a href="https://finewinedelivery.co.nz" target="_blank">
-              <img
-                src="https://www.finewinedelivery.co.nz/content/products/original/27061.jpg"
-                onDragStart={handleOnDragStart}
-                style={{ height: 150 }}
-              />
-              <p>2015 Frescobaldi Remole IGT</p>
-              <b>$23.99</b>
-            </a>
-          </div>
-          <div style={{ textAlign: "center", textDecoration: "none" }}>
-            <a href="https://finewinedelivery.co.nz" target="_blank">
-              <img
-                src="https://www.finewinedelivery.co.nz/content/products/original/29467~1544125555.jpg"
-                onDragStart={handleOnDragStart}
-                style={{ height: 150 }}
-              />
-              <p>2016 Rocca delle Macie Chianti Classico DOCG</p>
-              <b>$26.99</b>
-            </a>
-          </div>
-          <div style={{ textAlign: "center", textDecoration: "none" }}>
-            <a href="https://finewinedelivery.co.nz" target="_blank">
-              <img
-                src="https://www.finewinedelivery.co.nz/content/products/original/30622~1556078210.jpg"
-                onDragStart={handleOnDragStart}
-                style={{ height: 150 }}
-              />
-              <p>2017 Frescobaldi Castiglioni Chianti DOCG</p>
-              <b>$32.90</b>
-            </a>
-          </div>
+          {wine.map(data => (
+            <div
+              style={{
+                textAlign: "center",
+                textDecoration: "none",
+                color: "black",
+                underline: "none"
+              }}
+            >
+              <a
+                href={data.url}
+                target="_blank"
+                style={{
+                  textDecoration: "none",
+                  color: "#263238"
+                }}
+              >
+                <img
+                  src={data.img}
+                  onDragStart={handleOnDragStart}
+                  style={{ height: 150 }}
+                />
+                <p style={{margin: 0}}>{data.name}</p>
+                <b>${data.price}</b>
+              </a>
+            </div>
+          ))}
         </AliceCarousel>
-        <button className="roundButton" onClick={this.slidePrevPage}>
+        <button
+          className="roundButton"
+          onClick={this.slidePrevPage}
+          style={{
+            position: "relative",
+            float: "left",
+            marginTop: "-150px",
+            cursor: "pointer"
+          }}
+        >
           <img
             src={LeftArrow}
             style={{ width: "6px", margin: "5px 0 0 0" }}
           />
         </button>
-        <button className="roundButton" onClick={this.slideNextPage}>
+        <button
+          className="roundButton"
+          onClick={this.slideNextPage}
+          style={{
+            position: "relative",
+            float: "right",
+            marginTop: "-150px",
+            cursor: "pointer"
+          }}
+        >
           <img
             src={RightArrow}
             style={{ width: "6px", margin: "5px 0 0 0" }}
