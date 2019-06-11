@@ -4,7 +4,7 @@ export default [
     author: "them",
     data: {
       text:
-        "Hi, I'm Virtual Jeff, I can help you find wine, beer, spirits or answer any questions about our stores and deliveries."
+        "Hi, I'm Virtual Jeff. I’ve tried everything in the store and can help you find wine, beer,  or spirits."
     }
   },
   {

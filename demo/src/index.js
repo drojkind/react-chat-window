@@ -1,12 +1,10 @@
-import React, {Component} from 'react'
-import {render} from 'react-dom'
-import {Launcher} from '../../src'
-import messageHistory from './messageHistory';
-import TestArea from './TestArea';
-import Header from './Header';
-import './../assets/styles'
-
-
+import React, { Component } from "react";
+import { render } from "react-dom";
+import { Launcher } from "../../src";
+import messageHistory from "./messageHistory";
+import TestArea from "./TestArea";
+import Header from "./Header";
+import "./../assets/styles";
 
 class Demo extends Component {
   constructor() {
@@ -14,7 +12,8 @@ class Demo extends Component {
     this.state = {
       messageList: messageHistory,
       newMessagesCount: 0,
-      isOpen: false
+      isOpen: false,
+      context: {}
     };
   }
 
@@ -22,27 +21,72 @@ class Demo extends Component {
     this.setState({
       messageList: [...this.state.messageList, message]
     });
+    this.sendMessage(message);
   }
 
-  _onFilesSelected(fileList) {
-    const objectURL = window.URL.createObjectURL(fileList[0]);
-    this.setState({
-      messageList: [
-        ...this.state.messageList,
-        {
-          type: "file",
-          author: "me",
-          data: {
-            url: objectURL,
-            fileName: fileList[0].name
-          }
+  componentWillMount() {
+    this.firstLoad();
+  }
+
+  firstLoad = () => {
+    const options = {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    };
+
+    fetch("http://127.0.0.1:1337/api/message", options)
+      .then(response => {
+        return response.json();
+      })
+      .then(json => {
+        this.setState({ context: json.context });
+      })
+      .catch(error => {});
+  };
+
+  sendMessage = text => {
+    // Build request payload
+    var payloadToWatson = {};
+
+    payloadToWatson.input = {
+      text: text.data.text
+    };
+
+    payloadToWatson.context = this.state.context;
+
+    const options = {
+      body: JSON.stringify(payloadToWatson),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      method: "POST"
+    };
+
+    fetch("http://127.0.0.1:1337/api/message", options)
+      .then(response => {
+        return response.json();
+      })
+      .then(json => {
+        // Updates to latest context
+        this.setState({ context: json.context });
+        if (json.output.generic[0].response_type === "option") {
+         console.log('option was hit!!!')
+          this._sendButton(json.output.generic[0]);
+        } else if (json.output.generic[0].response_type === "text") {
+          this._sendCarousel(json.output.generic[0]);
         }
-      ]
-    });
-  }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
-  _sendMessage(text) {
-    if (text.length > 0) {
+  _sendMessage(data) {
+    if (data.length > 0) {
       const newMessagesCount = this.state.isOpen
         ? this.state.newMessagesCount
         : this.state.newMessagesCount + 1;
@@ -53,15 +97,27 @@ class Demo extends Component {
           {
             author: "them",
             type: "text",
-            data: { text }
+            data: { data }
           }
         ]
       });
     }
   }
 
-  _sendButton(text) {
-    if (text.length > 0) {
+  _sendButton(data) {
+
+    let buttons = [];
+
+
+      Array.from(data.options, x =>
+        buttons.push({
+          text: x.label
+        })
+      )
+
+      console.log('BUTTONS is', buttons)
+
+    // const buttons = data.options.map(data => text: data.label);
       const newMessagesCount = this.state.isOpen
         ? this.state.newMessagesCount
         : this.state.newMessagesCount + 1;
@@ -73,17 +129,15 @@ class Demo extends Component {
             type: "button",
             author: "them",
             data: {
-              text: "How fruity do you like your wine?",
-              button: [{ text: "Medium Fruit" }, { text: "Full Fruit" }]
+              text: data.title,
+              button: buttons
             }
           }
         ]
       });
-    }
   }
 
-  _sendCarousel(text) {
-    if (text.length > 0) {
+  _sendCarousel(data) {
       const newMessagesCount = this.state.isOpen
         ? this.state.newMessagesCount
         : this.state.newMessagesCount + 1;
@@ -122,7 +176,10 @@ class Demo extends Component {
           }
         ]
       });
-    }
+  }
+
+  _buttonClick(data){
+    console.log('button clicked')
   }
 
   _handleClick() {
@@ -147,17 +204,16 @@ class Demo extends Component {
             imageUrl:
               "https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png"
           }}
+          onButtonClick={this._buttonClick.bind(this)}
           onMessageWasSent={this._onMessageWasSent.bind(this)}
-          onFilesSelected={this._onFilesSelected.bind(this)}
           messageList={this.state.messageList}
           newMessagesCount={this.state.newMessagesCount}
           handleClick={this._handleClick.bind(this)}
           isOpen={this.state.isOpen}
-          showEmoji
         />
       </div>
     );
   }
 }
 
-render(<Demo/>, document.querySelector('#demo'))
+render(<Demo />, document.querySelector("#demo"));
