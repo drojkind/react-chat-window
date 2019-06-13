@@ -39,6 +39,12 @@ class Launcher extends Component {
       });
     }
   }
+
+  buttonClick(data){
+    console.log("button clicked...")
+    console.log(data)
+  }
+
   render() {
     const isOpen = this.props.hasOwnProperty('isOpen') ? this.props.isOpen : this.state.isOpen;
     const classList = [
@@ -47,20 +53,27 @@ class Launcher extends Component {
     ];
     return (
       <div id="sc-launcher">
-        <div className={classList.join(' ')} onClick={this.handleClick.bind(this)}>
-          <MessageCount count={this.props.newMessagesCount} isOpen={isOpen} />
+        <div
+          className={classList.join(" ")}
+          onClick={this.handleClick.bind(this)}
+        >
+          <MessageCount
+            count={this.props.newMessagesCount}
+            isOpen={isOpen}
+          />
           <img className={"sc-open-icon"} src={launcherIconActive} />
           <img className={"sc-closed-icon"} src={launcherIcon} />
         </div>
-        <ChatWindow
-          messageList={this.props.messageList}
-          onUserInputSubmit={this.props.onMessageWasSent}
-          onFilesSelected={this.props.onFilesSelected}
-          agentProfile={this.props.agentProfile}
-          isOpen={isOpen}
-          onClose={this.handleClick.bind(this)}
-          showEmoji={this.props.showEmoji}
-        />
+          <ChatWindow
+            onButtonClick={(data) => this.props.onButtonClick(data)}
+            messageList={this.props.messageList}
+            onUserInputSubmit={this.props.onMessageWasSent}
+            onFilesSelected={this.props.onFilesSelected}
+            agentProfile={this.props.agentProfile}
+            isOpen={isOpen}
+            onClose={this.handleClick.bind(this)}
+            showEmoji={this.props.showEmoji}
+          />
       </div>
     );
   }

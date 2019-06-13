@@ -4,7 +4,6 @@ import EmojiMessage from './EmojiMessage'
 import FileMessage from './FileMessage'
 import CarouselMessage from "./CarouselMessage";
 import ButtonMessage from "./ButtonMessage";
-import chatIconUrl from './../../assets/chat-icon.svg'
 
 
 class Message extends Component {
@@ -12,7 +11,7 @@ class Message extends Component {
   _renderMessageOfType(type) {
     switch (type) {
       case "text":
-        return <TextMessage {...this.props.message} />;
+        return <TextMessage {...this.props.message}n />;
       case "emoji":
         return <EmojiMessage {...this.props.message} />;
       case "file":
@@ -20,7 +19,7 @@ class Message extends Component {
       case "carousel":
         return <CarouselMessage {...this.props.message} />;
       case "button":
-        return <ButtonMessage {...this.props.message} />;
+        return <ButtonMessage {...this.props.message} onButtonClick={(data) => this.props.onButtonClick(data)}  />;
       default:
         console.error(
           `Attempting to load message with unsupported file type '${type}'`
@@ -36,9 +35,6 @@ class Message extends Component {
     return (
       <div className="sc-message">
         <div className={contentClassList.join(" ")}>
-          {/* <div className="sc-message--avatar" style={{
-            backgroundImage: `url(${chatIconUrl})`
-          }}></div>*/}
           {this._renderMessageOfType(this.props.message.type)}
         </div>
       </div>

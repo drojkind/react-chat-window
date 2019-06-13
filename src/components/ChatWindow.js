@@ -25,13 +25,14 @@ class ChatWindow extends Component {
         (this.props.isOpen ? "opened" : "closed")
       ];
       return (
-        <div className={classList.join(' ')}>
+        <div className={classList.join(" ")}>
           <Header
             teamName={this.props.agentProfile.teamName}
             imageUrl={this.props.agentProfile.imageUrl}
             onClose={this.props.onClose}
           />
           <MessageList
+            onButtonClick={data => this.props.onButtonClick(data)}
             messages={messageList}
             imageUrl={this.props.agentProfile.imageUrl}
           />

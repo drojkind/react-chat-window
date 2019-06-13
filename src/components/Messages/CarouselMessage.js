@@ -27,6 +27,7 @@ class CarouselMessage extends React.Component {
     }
   };
   render() {
+    console.log('carousel props', this.props)
     const handleOnDragStart = e => e.preventDefault();
     const { currentIndex } = this.state;
     const {wine} = this.props.data;

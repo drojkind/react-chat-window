@@ -48,6 +48,7 @@ class Demo extends Component {
   };
 
   sendMessage = text => {
+    console.log('THIS IS THE TEXRT', text)
     // Build request payload
     var payloadToWatson = {};
 
@@ -74,10 +75,10 @@ class Demo extends Component {
         // Updates to latest context
         this.setState({ context: json.context });
         if (json.output.generic[0].response_type === "option") {
-         console.log('option was hit!!!')
           this._sendButton(json.output.generic[0]);
+          // We need to be more specific for this check. As text type is used for other responses as well...
         } else if (json.output.generic[0].response_type === "text") {
-          this._sendCarousel(json.output.generic[0]);
+          this._sendCarousel(json);
         }
       })
       .catch(error => {
@@ -105,81 +106,79 @@ class Demo extends Component {
   }
 
   _sendButton(data) {
-
     let buttons = [];
-
-
-      Array.from(data.options, x =>
-        buttons.push({
-          text: x.label
-        })
-      )
-
-      console.log('BUTTONS is', buttons)
+    //Creates an array from the names of buttons received...
+    Array.from(data.options, x =>
+      buttons.push({
+        text: x.label
+      })
+    );
 
     // const buttons = data.options.map(data => text: data.label);
-      const newMessagesCount = this.state.isOpen
-        ? this.state.newMessagesCount
-        : this.state.newMessagesCount + 1;
-      this.setState({
-        newMessagesCount: newMessagesCount,
-        messageList: [
-          ...this.state.messageList,
-          {
-            type: "button",
-            author: "them",
-            data: {
-              text: data.title,
-              button: buttons
-            }
+    const newMessagesCount = this.state.isOpen
+      ? this.state.newMessagesCount
+      : this.state.newMessagesCount + 1;
+    this.setState({
+      newMessagesCount: newMessagesCount,
+      messageList: [
+        ...this.state.messageList,
+        {
+          type: "button",
+          author: "them",
+          data: {
+            text: data.title,
+            button: buttons
           }
-        ]
-      });
+        }
+      ]
+    });
   }
 
   _sendCarousel(data) {
-      const newMessagesCount = this.state.isOpen
-        ? this.state.newMessagesCount
-        : this.state.newMessagesCount + 1;
-      this.setState({
-        newMessagesCount: newMessagesCount,
-        messageList: [
-          ...this.state.messageList,
-          {
-            type: "carousel",
-            author: "them",
-            data: {
-              wine: [
-                {
-                  name: "2015 Frescobaldi Remole IGT",
-                  price: 23.99,
-                  img:
-                    "https://www.finewinedelivery.co.nz/content/products/original/27061.jpg",
-                  url: "https://www.finewinedelivery.co.nz"
-                },
-                {
-                  name: "2016 Rocca delle Macie Chianti Classico DOCG",
-                  price: 26.99,
-                  img:
-                    "https://www.finewinedelivery.co.nz/content/products/original/29467~1544125555.jpg",
-                  url: "https://www.finewinedelivery.co.nz"
-                },
-                {
-                  name: "2017 Frescobaldi Castiglioni Chianti DOCG",
-                  price: 32.9,
-                  img:
-                    "https://www.finewinedelivery.co.nz/content/products/original/30622~1556078210.jpg",
-                  url: "https://www.finewinedelivery.co.nz"
-                }
-              ]
-            }
-          }
-        ]
-      });
+    console.log('carousel data', data)
+    console.log(data.context.wds.list_products)
+    console.log(data.context.wds.list_products);
+
+    console.log(typeof data.context.wds.list_products);
+    const newMessagesCount = this.state.isOpen
+      ? this.state.newMessagesCount
+      : this.state.newMessagesCount + 1;
+    this.setState({
+      newMessagesCount: newMessagesCount,
+      messageList: [
+        ...this.state.messageList,
+        {
+          type: "carousel",
+          author: "them",
+          data: {
+            wine: data.context.wds.list_products
+          } 
+        }
+      ]
+    });
   }
 
-  _buttonClick(data){
-    console.log('button clicked')
+  _buttonClick(data) {
+    const newMessagesCount = this.state.isOpen
+      ? this.state.newMessagesCount
+      : this.state.newMessagesCount + 1;
+    this.setState({
+      newMessagesCount: newMessagesCount,
+      messageList: [
+        ...this.state.messageList,
+        {
+          author: "me",
+          type: "text",
+          data: { text: data }
+        }
+      ]
+    });
+
+    this.sendMessage({
+      author: "me",
+      type: "text",
+      data: { text: data }
+    });
   }
 
   _handleClick() {
@@ -193,18 +192,13 @@ class Demo extends Component {
     return (
       <div>
         <Header />
-        <TestArea
-          onMessage={this._sendMessage.bind(this)}
-          onButton={data => this._sendButton(data)}
-          onCarousel={data => this._sendCarousel(data)}
-        />
         <Launcher
           agentProfile={{
             teamName: "FWD Chat",
             imageUrl:
               "https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png"
           }}
-          onButtonClick={this._buttonClick.bind(this)}
+          onButtonClick={(data) => this._buttonClick(data)}
           onMessageWasSent={this._onMessageWasSent.bind(this)}
           messageList={this.state.messageList}
           newMessagesCount={this.state.newMessagesCount}
